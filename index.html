@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simpan Pinjam Keuangan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            height: fit-content;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .user-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .stats-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .stat-item.simpanan {
+            border-left-color: var(--accent);
+        }
+
+        .stat-item.pinjaman {
+            border-left-color: var(--warning);
+        }
+
+        .stat-label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .dashboard-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .card.simpanan {
+            border-left-color: var(--accent);
+        }
+
+        .card.pinjaman {
+            border-left-color: var(--warning);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .card-icon.simpanan {
+            background-color: var(--accent);
+        }
+
+        .card-icon.pinjaman {
+            background-color: var(--warning);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .card-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid #eee;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status.sukses {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status.pending {
+            background-color: #fef9e7;
+            color: #f39c12;
+        }
+
+        .status.ditolak {
+            background-color: #fdedec;
+            color: #e74c3c;
+        }
+
+        /* Form */
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #777;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--secondary);
+            border-bottom-color: var(--secondary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-hand-holding-usd"></i>
+                <h1>Simpan Pinjam</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-tab="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#" data-tab="simpan"><i class="fas fa-piggy-bank"></i> Simpan</a></li>
+                    <li><a href="#" data-tab="pinjam"><i class="fas fa-hand-holding-heart"></i> Pinjam</a></li>
+                    <li><a href="#" data-tab="riwayat"><i class="fas fa-history"></i> Riwayat</a></li>
+                    <li><a href="#" data-tab="laporan"><i class="fas fa-chart-bar"></i> Laporan</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h3>Budi Santoso</h3>
+                <p>Anggota sejak: Januari 2023</p>
+            </div>
+            
+            <div class="stats-summary">
+                <div class="stat-item">
+                    <span class="stat-label">Saldo Tersedia</span>
+                    <span class="stat-value">Rp 5.250.000</span>
+                </div>
+                <div class="stat-item simpanan">
+                    <span class="stat-label">Total Simpanan</span>
+                    <span class="stat-value">Rp 8.500.000</span>
+                </div>
+                <div class="stat-item pinjaman">
+                    <span class="stat-label">Total Pinjaman</span>
+                    <span class="stat-value">Rp 3.250.000</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Dashboard Content -->
+        <main class="dashboard">
+            <!-- Dashboard Tab (Default) -->
+            <div id="dashboard" class="tab-content active">
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-line"></i> Ringkasan Keuangan</h2>
+                        <button class="btn btn-primary" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Simpanan</h3>
+                                <div class="card-icon simpanan">
+                                    <i class="fas fa-piggy-bank"></i>
+                                </div>
+                            </div>
+                            <p class="card-amount">Rp 8.500.000</p>
+                            <p>+ Rp 500.000 bulan ini</p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Pinjaman</h3>
+                                <div class="card-icon pinjaman">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
+                            </div>
+                            <p class="card-amount">Rp 3.250.000</p>
+                            <p>Jatuh tempo: 15 Juli 2023</p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Bunga Diterima</h3>
+                                <div class="card-icon" style="background-color: var(--secondary);">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                            </div>
+                            <p class="card-amount">Rp 425.000</p>
+                            <p>Tahun 2023</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-history"></i> Transaksi Terbaru</h2>
+                        <button class="btn btn-primary" id="lihatSemuaBtn">
+                            <i class="fas fa-list"></i> Lihat Semua
+                        </button>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Jenis</th>
+                                <th>Keterangan</th>
+                                <th>Jumlah</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentTransactions">
+                            <!-- Data transaksi akan dimuat di sini -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <!-- Simpan Tab -->
+            <div id="simpan" class="tab-content">
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-piggy-bank"></i> Simpan Uang</h2>
+                    </div>
+                    
+                    <div class="tabs">
+                        <button class="tab active" data-subtab="tab-simpan-form">Tambah Simpanan</button>
+                        <button class="tab" data-subtab="tab-simpan-riwayat">Riwayat Simpanan</button>
+                    </div>
+                    
+                    <!-- Form Simpanan -->
+                    <div id="tab-simpan-form" class="subtab-content active">
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="jumlahSimpan">Jumlah Simpanan (Rp)</label>
+                                <input type="number" id="jumlahSimpan" class="form-control" min="10000" step="10000" placeholder="Masukkan jumlah simpanan">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="jenisSimpanan">Jenis Simpanan</label>
+                                <select id="jenisSimpanan" class="form-control">
+                                    <option value="pokok">Simpanan Pokok</option>
+                                    <option value="wajib">Simpanan Wajib</option>
+                                    <option value="sukarela">Simpanan Sukarela</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tanggalSimpan">Tanggal Simpan</label>
+                                <input type="date" id="tanggalSimpan" class="form-control">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="keteranganSimpan">Keterangan (Opsional)</label>
+                                <textarea id="keteranganSimpan" class="form-control" rows="3" placeholder="Tambahkan keterangan jika perlu"></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-warning" id="resetSimpanBtn">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                                <button class="btn btn-success" id="simpanBtn">
+                                    <i class="fas fa-save"></i> Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Riwayat Simpanan -->
+                    <div id="tab-simpan-riwayat" class="subtab-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Jenis</th>
+                                    <th>Keterangan</th>
+                                    <th>Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riwayatSimpanan">
+                                <!-- Data riwayat simpanan akan dimuat di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Pinjam Tab -->
+            <div id="pinjam" class="tab-content">
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-hand-holding-usd"></i> Ajukan Pinjaman</h2>
+                    </div>
+                    
+                    <div class="tabs">
+                        <button class="tab active" data-subtab="tab-pinjam-form">Ajukan Pinjaman</button>
+                        <button class="tab" data-subtab="tab-pinjam-riwayat">Riwayat Pinjaman</button>
+                        <button class="tab" data-subtab="tab-pinjam-aktif">Pinjaman Aktif</button>
+                    </div>
+                    
+                    <!-- Form Pinjaman -->
+                    <div id="tab-pinjam-form" class="subtab-content active">
+                        <div class="form-container">
+                            <div class="form-group">
+                                <label for="jumlahPinjam">Jumlah Pinjaman (Rp)</label>
+                                <input type="number" id="jumlahPinjam" class="form-control" min="100000" step="50000" placeholder="Masukkan jumlah pinjaman">
+                                <small>Maksimal pinjaman: Rp 10.000.000</small>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="tenorPinjam">Tenor (Bulan)</label>
+                                    <select id="tenorPinjam" class="form-control">
+                                        <option value="6">6 Bulan</option>
+                                        <option value="12">12 Bulan</option>
+                                        <option value="24">24 Bulan</option>
+                                        <option value="36">36 Bulan</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bungaPinjam">Suku Bunga (%)</label>
+                                    <input type="text" id="bungaPinjam" class="form-control" value="1.5" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tujuanPinjam">Tujuan Pinjaman</label>
+                                <select id="tujuanPinjam" class="form-control">
+                                    <option value="usaha">Modal Usaha</option>
+                                    <option value="pendidikan">Pendidikan</option>
+                                    <option value="kesehatan">Kesehatan</option>
+                                    <option value="konsumsi">Konsumsi</option>
+                                    <option value="lainnya">Lainnya</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="keteranganPinjam">Keterangan (Opsional)</label>
+                                <textarea id="keteranganPinjam" class="form-control" rows="3" placeholder="Jelaskan tujuan pinjaman secara detail"></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-warning" id="resetPinjamBtn">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                                <button class="btn btn-success" id="ajukanPinjamBtn">
+                                    <i class="fas fa-paper-plane"></i> Ajukan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Riwayat Pinjaman -->
+                    <div id="tab-pinjam-riwayat" class="subtab-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Jumlah</th>
+                                    <th>Tenor</th>
+                                    <th>Tujuan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="riwayatPinjaman">
+                                <!-- Data riwayat pinjaman akan dimuat di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pinjaman Aktif -->
+                    <div id="tab-pinjam-aktif" class="subtab-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tanggal Cair</th>
+                                    <th>Jumlah</th>
+                                    <th>Sisa Tenor</th>
+                                    <th>Angsuran/Bulan</th>
+                                    <th>Sisa Pokok</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pinjamanAktif">
+                                <!-- Data pinjaman aktif akan dimuat di sini -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Riwayat Tab -->
+            <div id="riwayat" class="tab-content">
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-history"></i> Riwayat Transaksi</h2>
+                        <div>
+                            <button class="btn btn-primary" id="filterSemua">
+                                <i class="fas fa-filter"></i> Semua
+                            </button>
+                            <button class="btn btn-primary" id="filterSimpanan">
+                                <i class="fas fa-piggy-bank"></i> Simpanan
+                            </button>
+                            <button class="btn btn-primary" id="filterPinjaman">
+                                <i class="fas fa-hand-holding-usd"></i> Pinjaman
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Jenis</th>
+                                <th>Keterangan</th>
+                                <th>Jumlah</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="riwayatTransaksi">
+                            <!-- Data riwayat transaksi akan dimuat di sini -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            
+            <!-- Laporan Tab -->
+            <div id="laporan" class="tab-content">
+                <section class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-bar"></i> Laporan Keuangan</h2>
+                        <button class="btn btn-success" id="unduhLaporanBtn">
+                            <i class="fas fa-download"></i> Unduh Laporan
+                        </button>
+                    </div>
+                    
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Total Simpanan 2023</h3>
+                                <div class="card-icon simpanan">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                            </div>
+                            <p class="card-amount">Rp 3.500.000</p>
+                            <p>+15% dari tahun lalu</p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Total Pinjaman 2023</h3>
+                                <div class="card-icon pinjaman">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                            </div>
+                            <p class="card-amount">Rp 2.250.000</p>
+                            <p>2 pinjaman aktif</p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Pendapatan Bunga</h3>
+                                <div class="card-icon" style="background-color: var(--secondary);">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                            </div>
+                            <p class="card-amount">Rp 425.000</p>
+                            <p>Tahun 2023</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" style="margin-top: 30px;">
+                        <div class="form-group">
+                            <label for="periodeLaporan">Periode Laporan</label>
+                            <select id="periodeLaporan" class="form-control">
+                                <option value="bulan">Bulan Ini</option>
+                                <option value="triwulan">Triwulan</option>
+                                <option value="semester">Semester</option>
+                                <option value="tahun">Tahun Ini</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="jenisLaporan">Jenis Laporan</label>
+                            <select id="jenisLaporan" class="form-control">
+                                <option value="ringkasan">Ringkasan</option>
+                                <option value="detail">Detail Transaksi</option>
+                                <option value="simpanan">Laporan Simpanan</option>
+                                <option value="pinjaman">Laporan Pinjaman</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="generateLaporanBtn">
+                            <i class="fas fa-chart-bar"></i> Generate Laporan
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2023 Simpan Pinjam Keuangan. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-question-circle"></i> Bantuan</a>
+                <a href="#"><i class="fas fa-envelope"></i> Kontak</a>
+                <a href="#"><i class="fas fa-shield-alt"></i> Kebijakan Privasi</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data contoh untuk aplikasi
+        const sampleData = {
+            transactions: [
+                { id: 1, date: "2023-06-15", type: "simpanan", description: "Simpanan Pokok", amount: 50000, status: "sukses" },
+                { id: 2, date: "2023-06-10", type: "simpanan", description: "Simpanan Wajib", amount: 100000, status: "sukses" },
+                { id: 3, date: "2023-06-05", type: "pinjaman", description: "Pinjaman Modal Usaha", amount: 2000000, status: "sukses" },
+                { id: 4, date: "2023-06-01", type: "simpanan", description: "Simpanan Sukarela", amount: 250000, status: "sukses" },
+                { id: 5, date: "2023-05-28", type: "pinjaman", description: "Pinjaman Pendidikan", amount: 1250000, status: "pending" },
+                { id: 6, date: "2023-05-20", type: "simpanan", description: "Simpanan Wajib", amount: 100000, status: "sukses" },
+                { id: 7, date: "2023-05-15", type: "pinjaman", description: "Pinjaman Konsumsi", amount: 500000, status: "ditolak" },
+                { id: 8, date: "2023-05-10", type: "simpanan", description: "Simpanan Sukarela", amount: 150000, status: "sukses" }
+            ],
+            savings: [
+                { id: 1, date: "2023-06-15", type: "pokok", description: "Simpanan Pokok", amount: 50000 },
+                { id: 2, date: "2023-06-10", type: "wajib", description: "Simpanan Wajib", amount: 100000 },
+                { id: 3, date: "2023-06-01", type: "sukarela", description: "Simpanan Sukarela", amount: 250000 },
+                { id: 4, date: "2023-05-20", type: "wajib", description: "Simpanan Wajib", amount: 100000 },
+                { id: 5, date: "2023-05-10", type: "sukarela", description: "Simpanan Sukarela", amount: 150000 }
+            ],
+            loans: [
+                { id: 1, date: "2023-06-05", amount: 2000000, tenor: 12, purpose: "usaha", status: "sukses" },
+                { id: 2, date: "2023-05-28", amount: 1250000, tenor: 24, purpose: "pendidikan", status: "pending" },
+                { id: 3, date: "2023-05-15", amount: 500000, tenor: 6, purpose: "konsumsi", status: "ditolak" }
+            ],
+            activeLoans: [
+                { id: 1, date: "2023-06-05", amount: 2000000, remainingTenor: 11, installment: 183333, remainingPrincipal: 1650000 }
+            ]
+        };
+
+        // Format tanggal ke format Indonesia
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Format angka ke format Rupiah
+        function formatRupiah(amount) {
+            return `Rp ${amount.toLocaleString('id-ID')}`;
+        }
+
+        // Render data transaksi terbaru
+        function renderRecentTransactions() {
+            const tbody = document.getElementById('recentTransactions');
+            tbody.innerHTML = '';
+            
+            // Ambil 5 transaksi terbaru
+            const recent = sampleData.transactions.slice(0, 5);
+            
+            recent.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(transaction.date)}</td>
+                    <td>${transaction.type === 'simpanan' ? 'Simpanan' : 'Pinjaman'}</td>
+                    <td>${transaction.description}</td>
+                    <td>${formatRupiah(transaction.amount)}</td>
+                    <td><span class="status ${transaction.status}">${transaction.status === 'sukses' ? 'Berhasil' : transaction.status === 'pending' ? 'Menunggu' : 'Ditolak'}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render riwayat simpanan
+        function renderSavingsHistory() {
+            const tbody = document.getElementById('riwayatSimpanan');
+            tbody.innerHTML = '';
+            
+            sampleData.savings.forEach(saving => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(saving.date)}</td>
+                    <td>${saving.type === 'pokok' ? 'Pokok' : saving.type === 'wajib' ? 'Wajib' : 'Sukarela'}</td>
+                    <td>${saving.description}</td>
+                    <td>${formatRupiah(saving.amount)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render riwayat pinjaman
+        function renderLoansHistory() {
+            const tbody = document.getElementById('riwayatPinjaman');
+            tbody.innerHTML = '';
+            
+            sampleData.loans.forEach(loan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(loan.date)}</td>
+                    <td>${formatRupiah(loan.amount)}</td>
+                    <td>${loan.tenor} Bulan</td>
+                    <td>${loan.purpose === 'usaha' ? 'Modal Usaha' : loan.purpose === 'pendidikan' ? 'Pendidikan' : loan.purpose === 'kesehatan' ? 'Kesehatan' : loan.purpose === 'konsumsi' ? 'Konsumsi' : 'Lainnya'}</td>
+                    <td><span class="status ${loan.status}">${loan.status === 'sukses' ? 'Disetujui' : loan.status === 'pending' ? 'Menunggu' : 'Ditolak'}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render pinjaman aktif
+        function renderActiveLoans() {
+            const tbody = document.getElementById('pinjamanAktif');
+            tbody.innerHTML = '';
+            
+            sampleData.activeLoans.forEach(loan => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(loan.date)}</td>
+                    <td>${formatRupiah(loan.amount)}</td>
+                    <td>${loan.remainingTenor} Bulan</td>
+                    <td>${formatRupiah(loan.installment)}</td>
+                    <td>${formatRupiah(loan.remainingPrincipal)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render semua riwayat transaksi
+        function renderAllTransactions() {
+            const tbody = document.getElementById('riwayatTransaksi');
+            tbody.innerHTML = '';
+            
+            sampleData.transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(transaction.date)}</td>
+                    <td>${transaction.type === 'simpanan' ? 'Simpanan' : 'Pinjaman'}</td>
+                    <td>${transaction.description}</td>
+                    <td>${formatRupiah(transaction.amount)}</td>
+                    <td><span class="status ${transaction.status}">${transaction.status === 'sukses' ? 'Berhasil' : transaction.status === 'pending' ? 'Menunggu' : 'Ditolak'}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Filter transaksi berdasarkan jenis
+        function filterTransactions(type) {
+            const tbody = document.getElementById('riwayatTransaksi');
+            tbody.innerHTML = '';
+            
+            let filtered = sampleData.transactions;
+            if (type !== 'semua') {
+                filtered = sampleData.transactions.filter(t => t.type === type);
+            }
+            
+            filtered.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatDate(transaction.date)}</td>
+                    <td>${transaction.type === 'simpanan' ? 'Simpanan' : 'Pinjaman'}</td>
+                    <td>${transaction.description}</td>
+                    <td>${formatRupiah(transaction.amount)}</td>
+                    <td><span class="status ${transaction.status}">${transaction.status === 'sukses' ? 'Berhasil' : transaction.status === 'pending' ? 'Menunggu' : 'Ditolak'}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Fungsi untuk beralih antara tab utama
+        function switchTab(tabId) {
+            // Sembunyikan semua tab
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Tampilkan tab yang dipilih
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update navigasi aktif
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`nav a[data-tab="${tabId}"]`).classList.add('active');
+            
+            // Render data yang sesuai
+            if (tabId === 'dashboard') {
+                renderRecentTransactions();
+            } else if (tabId === 'simpan') {
+                renderSavingsHistory();
+            } else if (tabId === 'pinjam') {
+                renderLoansHistory();
+                renderActiveLoans();
+            } else if (tabId === 'riwayat') {
+                renderAllTransactions();
+            }
+        }
+
+        // Fungsi untuk beralih antara subtab
+        function switchSubTab(tabId, parentTab) {
+            // Sembunyikan semua subtab di parent tab
+            document.querySelectorAll(`#${parentTab} .subtab-content`).forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Tampilkan subtab yang dipilih
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update tab aktif
+            document.querySelectorAll(`#${parentTab} .tab`).forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`#${parentTab} .tab[data-subtab="${tabId}"]`).classList.add('active');
+        }
+
+        // Fungsi untuk menambahkan simpanan baru
+        function addNewSaving() {
+            const amount = document.getElementById('jumlahSimpan').value;
+            const type = document.getElementById('jenisSimpanan').value;
+            const date = document.getElementById('tanggalSimpan').value || new Date().toISOString().split('T')[0];
+            const description = document.getElementById('keteranganSimpan').value || `Simpanan ${type === 'pokok' ? 'Pokok' : type === 'wajib' ? 'Wajib' : 'Sukarela'}`;
+            
+            if (!amount || amount < 10000) {
+                alert('Jumlah simpanan minimal Rp 10.000');
+                return;
+            }
+            
+            // Tambahkan ke data simpanan
+            const newId = sampleData.savings.length + 1;
+            const newSaving = {
+                id: newId,
+                date: date,
+                type: type,
+                description: description,
+                amount: parseInt(amount)
+            };
+            
+            sampleData.savings.unshift(newSaving);
+            
+            // Tambahkan ke transaksi
+            const newTransactionId = sampleData.transactions.length + 1;
+            const newTransaction = {
+                id: newTransactionId,
+                date: date,
+                type: 'simpanan',
+                description: description,
+                amount: parseInt(amount),
+                status: 'sukses'
+            };
+            
+            sampleData.transactions.unshift(newTransaction);
+            
+            // Reset form
+            document.getElementById('jumlahSimpan').value = '';
+            document.getElementById('keteranganSimpan').value = '';
+            
+            // Update tampilan
+            renderSavingsHistory();
+            renderRecentTransactions();
+            
+            // Tampilkan pesan sukses
+            alert(`Simpanan sebesar ${formatRupiah(parseInt(amount))} berhasil ditambahkan!`);
+            
+            // Beralih ke riwayat simpanan
+            switchSubTab('tab-simpan-riwayat', 'simpan');
+        }
+
+        // Fungsi untuk mengajukan pinjaman baru
+        function addNewLoan() {
+            const amount = document.getElementById('jumlahPinjam').value;
+            const tenor = document.getElementById('tenorPinjam').value;
+            const purpose = document.getElementById('tujuanPinjam').value;
+            const description = document.getElementById('keteranganPinjam').value || `Pinjaman ${purpose === 'usaha' ? 'Modal Usaha' : purpose === 'pendidikan' ? 'Pendidikan' : purpose === 'kesehatan' ? 'Kesehatan' : purpose === 'konsumsi' ? 'Konsumsi' : 'Lainnya'}`;
+            
+            if (!amount || amount < 100000) {
+                alert('Jumlah pinjaman minimal Rp 100.000');
+                return;
+            }
+            
+            if (amount > 10000000) {
+                alert('Jumlah pinjaman maksimal Rp 10.000.000');
+                return;
+            }
+            
+            // Tambahkan ke data pinjaman
+            const newId = sampleData.loans.length + 1;
+            const newLoan = {
+                id: newId,
+                date: new Date().toISOString().split('T')[0],
+                amount: parseInt(amount),
+                tenor: parseInt(tenor),
+                purpose: purpose,
+                status: 'pending'
+            };
+            
+            sampleData.loans.unshift(newLoan);
+            
+            // Tambahkan ke transaksi
+            const newTransactionId = sampleData.transactions.length + 1;
+            const newTransaction = {
+                id: newTransactionId,
+                date: new Date().toISOString().split('T')[0],
+                type: 'pinjaman',
+                description: description,
+                amount: parseInt(amount),
+                status: 'pending'
+            };
+            
+            sampleData.transactions.unshift(newTransaction);
+            
+            // Reset form
+            document.getElementById('jumlahPinjam').value = '';
+            document.getElementById('keteranganPinjam').value = '';
+            
+            // Update tampilan
+            renderLoansHistory();
+            renderRecentTransactions();
+            
+            // Tampilkan pesan sukses
+            alert(`Pengajuan pinjaman sebesar ${formatRupiah(parseInt(amount))} berhasil diajukan! Status: Menunggu persetujuan.`);
+            
+            // Beralih ke riwayat pinjaman
+            switchSubTab('tab-pinjam-riwayat', 'pinjam');
+        }
+
+        // Inisialisasi aplikasi
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render data awal
+            renderRecentTransactions();
+            renderSavingsHistory();
+            renderLoansHistory();
+            renderActiveLoans();
+            renderAllTransactions();
+            
+            // Set tanggal hari ini untuk form
+            document.getElementById('tanggalSimpan').value = new Date().toISOString().split('T')[0];
+            
+            // Event listener untuk navigasi utama
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabId = this.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+            
+            // Event listener untuk subtab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const subtabId = this.getAttribute('data-subtab');
+                    const parentTab = this.closest('.tab-content').id;
+                    switchSubTab(subtabId, parentTab);
+                });
+            });
+            
+            // Event listener untuk tombol simpan
+            document.getElementById('simpanBtn').addEventListener('click', addNewSaving);
+            
+            // Event listener untuk tombol ajukan pinjaman
+            document.getElementById('ajukanPinjamBtn').addEventListener('click', addNewLoan);
+            
+            // Event listener untuk tombol reset simpanan
+            document.getElementById('resetSimpanBtn').addEventListener('click', function() {
+                document.getElementById('jumlahSimpan').value = '';
+                document.getElementById('keteranganSimpan').value = '';
+            });
+            
+            // Event listener untuk tombol reset pinjaman
+            document.getElementById('resetPinjamBtn').addEventListener('click', function() {
+                document.getElementById('jumlahPinjam').value = '';
+                document.getElementById('keteranganPinjam').value = '';
+            });
+            
+            // Event listener untuk filter riwayat
+            document.getElementById('filterSemua').addEventListener('click', function() {
+                filterTransactions('semua');
+            });
+            
+            document.getElementById('filterSimpanan').addEventListener('click', function() {
+                filterTransactions('simpanan');
+            });
+            
+            document.getElementById('filterPinjaman').addEventListener('click', function() {
+                filterTransactions('pinjaman');
+            });
+            
+            // Event listener untuk tombol refresh
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                renderRecentTransactions();
+                alert('Data telah diperbarui!');
+            });
+            
+            // Event listener untuk tombol lihat semua
+            document.getElementById('lihatSemuaBtn').addEventListener('click', function() {
+                switchTab('riwayat');
+            });
+            
+            // Event listener untuk tombol unduh laporan
+            document.getElementById('unduhLaporanBtn').addEventListener('click', function() {
+                alert('Laporan sedang diproses dan akan diunduh dalam beberapa saat...');
+            });
+            
+            // Event listener untuk tombol generate laporan
+            document.getElementById('generateLaporanBtn').addEventListener('click', function() {
+                const periode = document.getElementById('periodeLaporan').value;
+                const jenis = document.getElementById('jenisLaporan').value;
+                alert(`Membuat laporan ${jenis} untuk periode ${periode}...`);
+            });
+            
+            // Event listener untuk perubahan jumlah pinjaman
+            document.getElementById('jumlahPinjam').addEventListener('input', function() {
+                const amount = parseInt(this.value) || 0;
+                const tenor = parseInt(document.getElementById('tenorPinjam').value);
+                const bunga = 1.5; // 1.5% per bulan
+                
+                if (amount > 0 && tenor > 0) {
+                    const totalBunga = amount * (bunga / 100) * tenor;
+                    const totalPinjaman = amount + totalBunga;
+                    const angsuran = Math.round(totalPinjaman / tenor);
+                    
+                    // Tampilkan perkiraan angsuran
+                    const infoElement = document.getElementById('bungaPinjam').parentElement;
+                    if (!infoElement.querySelector('.info-angsuran')) {
+                        const info = document.createElement('small');
+                        info.className = 'info-angsuran';
+                        info.style.display = 'block';
+                        info.style.marginTop = '5px';
+                        info.style.color = '#3498db';
+                        infoElement.appendChild(info);
+                    }
+                    
+                    const info = infoElement.querySelector('.info-angsuran');
+                    info.textContent = `Perkiraan angsuran: ${formatRupiah(angsuran)}/bulan`;
+                }
+            });
+            
+            // Event listener untuk perubahan tenor pinjaman
+            document.getElementById('tenorPinjam').addEventListener('change', function() {
+                // Trigger perhitungan ulang
+                document.getElementById('jumlahPinjam').dispatchEvent(new Event('input'));
+            });
+        });
+    </script>
+</body>
+</html>
